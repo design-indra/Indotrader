@@ -78,13 +78,13 @@ export default function Home() {
   // ── Loading screen ─────────────────────────────────────────────────────────
   if (authState === 'loading') {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{background:'var(--surface)'}}>
         <div className="text-center">
           <div className="w-16 h-16 bg-gradient-to-br from-sky-400 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
             <Zap size={32} className="text-white" />
           </div>
           <div className="w-8 h-8 border-2 border-sky-500 border-t-transparent rounded-full animate-spin mx-auto mb-3"/>
-          <p className="text-gray-400 text-sm">Memuat IndoTrader...</p>
+          <p className="text-slate-500 text-sm">Memuat IndoTrader...</p>
         </div>
       </div>
     );
