@@ -657,7 +657,7 @@ function RiskSlider({ label, field, min, max, step=1, unit='', vals, setVals }) 
 
 // ─── RiskTab ──────────────────────────────────────────────────────────────────
 function RiskTab({ riskSettings: s, onUpdate, consecutiveLosses, openPositions }) {
-  const defaults = { stopLossPercent:1,takeProfitPercent:2,trailingStopPercent:0.5,maxRiskPercent:80,maxPositions:1,maxConsecutiveLosses:3,cooldownSeconds:10,targetProfitIDR:1000000 };
+  const defaults = { stopLossPercent:1,takeProfitPercent:2,trailingStopPercent:0.5,maxRiskPercent:40,maxPositions:1,maxConsecutiveLosses:3,cooldownSeconds:10,targetProfitIDR:1000000 };
   const [vals,   setVals]   = useState({ ...defaults, ...(s||{}) });
   const [saved,  setSaved]  = useState(false);
   const [saving, setSaving] = useState(false);
@@ -782,27 +782,86 @@ function SettingsTab({ config, setConfig, onResetDemo, onReset, userEmail, onLog
         )}
       </div>
 
-      {/* ── Max Profit Mode ── */}
+      {/* ── Profit Mode Selector ── */}
       <div className="rounded-2xl shadow-sm border border-slate-700 p-4" style={{background:'var(--surface-2)'}}>
-        <div className="flex items-center justify-between mb-2">
-          <div>
-            <p className="text-sm font-bold text-slate-200">🚀 Max Profit Mode</p>
-            <p className="text-xs text-slate-500 mt-0.5">Dynamic ATR SL/TP + Auto Compound setelah win streak</p>
+        <p className="text-sm font-bold text-slate-200 mb-1">⚡ Profit Mode</p>
+        <p className="text-xs text-slate-500 mb-3">Pilih satu mode — mode lain akan otomatis nonaktif</p>
+
+        {/* Max Profit Mode */}
+        <div className="flex items-center justify-between py-2.5 border-b border-slate-700/60">
+          <div className="flex-1 mr-3">
+            <p className="text-sm font-semibold text-slate-200">🚀 Max Profit Mode</p>
+            <p className="text-xs text-slate-500 mt-0.5">ATR dinamis · trailing ketat 0.3% · R:R min 1.5</p>
           </div>
           <button
             onClick={async () => {
               const d = await fetch('/api/settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'toggleMaxProfitMode'})}).then(r=>r.json());
               if(d.success && onUpdateRisk) onUpdateRisk(d.risk);
             }}
-            className={`relative w-12 h-6 rounded-full transition-colors ${riskSettings?.maxProfitMode ? 'bg-emerald-500' : 'bg-slate-600'}`}>
+            className={`relative w-12 h-6 rounded-full transition-colors shrink-0 ${riskSettings?.maxProfitMode ? 'bg-sky-500' : 'bg-slate-600'}`}>
             <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${riskSettings?.maxProfitMode ? 'translate-x-6' : 'translate-x-0.5'}`}/>
           </button>
         </div>
-        {riskSettings?.maxProfitMode && (
-          <div className="bg-emerald-900/20 border border-emerald-700/40 rounded-xl p-3 text-xs text-emerald-400 space-y-1">
-            <p>✅ <strong>ATR Dinamis</strong> — SL/TP menyesuaikan volatilitas realtime</p>
-            <p>✅ <strong>Auto Compound</strong> — size bertambah otomatis saat win streak 3+</p>
-            <p>✅ <strong>Buy Low Sell High</strong> — entry hanya di zona support/oversold</p>
+
+        {/* Ultra Profit Mode */}
+        <div className="flex items-center justify-between py-2.5 border-b border-slate-700/60">
+          <div className="flex-1 mr-3">
+            <p className="text-sm font-semibold text-amber-300">🔥 Ultra Profit Mode</p>
+            <p className="text-xs text-slate-500 mt-0.5">Risk 70% · streak bonus max 1.5x · partial TP +0.7% · R:R min 1.0</p>
+          </div>
+          <button
+            onClick={async () => {
+              const d = await fetch('/api/settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'toggleUltraProfitMode'})}).then(r=>r.json());
+              if(d.success && onUpdateRisk) onUpdateRisk(d.risk);
+            }}
+            className={`relative w-12 h-6 rounded-full transition-colors shrink-0 ${riskSettings?.ultraProfitMode ? 'bg-amber-500' : 'bg-slate-600'}`}>
+            <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${riskSettings?.ultraProfitMode ? 'translate-x-6' : 'translate-x-0.5'}`}/>
+          </button>
+        </div>
+
+        {/* Ultra Light Profit Mode */}
+        <div className="flex items-center justify-between pt-2.5">
+          <div className="flex-1 mr-3">
+            <p className="text-sm font-semibold text-emerald-300">🌿 Ultra Light Mode</p>
+            <p className="text-xs text-slate-500 mt-0.5">Risk 20% · no compounding · partial TP +0.5% · R:R min 2.0 · exit cepat</p>
+          </div>
+          <button
+            onClick={async () => {
+              const d = await fetch('/api/settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'toggleUltraLightMode'})}).then(r=>r.json());
+              if(d.success && onUpdateRisk) onUpdateRisk(d.risk);
+            }}
+            className={`relative w-12 h-6 rounded-full transition-colors shrink-0 ${riskSettings?.ultraLightMode ? 'bg-emerald-500' : 'bg-slate-600'}`}>
+            <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${riskSettings?.ultraLightMode ? 'translate-x-6' : 'translate-x-0.5'}`}/>
+          </button>
+        </div>
+
+        {/* Info card per mode aktif */}
+        {riskSettings?.ultraProfitMode && (
+          <div className="mt-3 bg-amber-900/20 border border-amber-700/40 rounded-xl p-3 text-xs text-amber-300 space-y-1">
+            <p className="font-bold">🔥 Ultra Profit aktif</p>
+            <p>✅ Risk per trade naik ke ~70% saldo</p>
+            <p>✅ Win streak 5x = size +50% otomatis</p>
+            <p>✅ Partial TP lebih cepat di profit +0.7%</p>
+            <p>⚠️ Mode agresif — cocok hanya untuk akun yang tahan volatilitas</p>
+          </div>
+        )}
+        {riskSettings?.ultraLightMode && (
+          <div className="mt-3 bg-emerald-900/20 border border-emerald-700/40 rounded-xl p-3 text-xs text-emerald-300 space-y-1">
+            <p className="font-bold">🌿 Ultra Light aktif</p>
+            <p>✅ Risk per trade hanya ~20% saldo (aman)</p>
+            <p>✅ Partial TP lebih cepat di profit +0.5%</p>
+            <p>✅ Hard exit lebih cepat: 15 menit tanpa progress</p>
+            <p>✅ Tidak ada compounding — size selalu stabil</p>
+            <p>✅ R:R minimum 2.0 — hanya trade berkualitas tinggi</p>
+          </div>
+        )}
+        {riskSettings?.maxProfitMode && !riskSettings?.ultraProfitMode && !riskSettings?.ultraLightMode && (
+          <div className="mt-3 bg-sky-900/20 border border-sky-700/40 rounded-xl p-3 text-xs text-sky-300 space-y-1">
+            <p className="font-bold">🚀 Max Profit aktif</p>
+            <p>✅ ATR dinamis — SL/TP menyesuaikan volatilitas realtime</p>
+            <p>✅ Trailing stop diperketat ke 0.3% setelah profit</p>
+            <p>✅ Auto compound saat win streak 3+</p>
+            <p>✅ R:R minimum 1.5 — filter trade berkualitas</p>
           </div>
         )}
       </div>
