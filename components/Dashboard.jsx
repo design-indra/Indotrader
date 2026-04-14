@@ -215,30 +215,30 @@ export default function Dashboard({ userEmail='', onLogout=null, bestPair=null, 
   const progress  = Math.min(100,Math.max(0,((totalBal-startBal)/(target-startBal))*100));
 
   if(loading) return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center" style={{background:'var(--surface)'}}>
       <div className="text-center">
         <div className="w-16 h-16 bg-sky-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
           <Zap size={32} className="text-white"/>
         </div>
-        <div className="w-8 h-8 border-3 border-sky-500 border-t-transparent rounded-full animate-spin mx-auto"/>
-        <p className="text-gray-500 text-sm mt-3">Memuat IndoTrader...</p>
+        <div className="w-8 h-8 border-2 border-sky-500 border-t-transparent rounded-full animate-spin mx-auto"/>
+        <p className="text-slate-500 text-sm mt-3">Memuat IndoTrader...</p>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen flex flex-col" style={{background:'#f0f4f8'}}>
+    <div className="min-h-screen flex flex-col" style={{background:'var(--surface)'}}>
 
       {/* ── TOP HEADER — hanya logo + pair + harga ── */}
-      <header className="bg-white border-b border-gray-200 shadow-sm px-3 flex items-center justify-between gap-2 sticky top-0 z-40" style={{height:52}}>
+      <header className="border-b border-slate-700 shadow-sm px-3 flex items-center justify-between gap-2 sticky top-0 z-40" style={{height:52, background:'var(--surface-2)'}}>
         {/* Logo */}
         <div className="flex items-center gap-2 shrink-0">
           <div className="w-8 h-8 bg-gradient-to-br from-sky-400 to-blue-500 rounded-xl flex items-center justify-center shadow">
             <Zap size={16} className="text-white"/>
           </div>
-          <span className="font-bold text-gray-800 text-sm">Indo<span className="text-sky-500">Trader</span></span>
+          <span className="font-bold text-slate-100 text-sm">Indo<span className="text-sky-400">Trader</span></span>
           {scannerActive && bestPair && (
-            <span className="hidden sm:flex items-center gap-1 text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">
+            <span className="hidden sm:flex items-center gap-1 text-xs bg-emerald-900/40 text-emerald-400 px-2 py-0.5 rounded-full font-semibold">
               🔍 {bestPair.display} {bestPair.score}pts
             </span>
           )}
@@ -249,9 +249,9 @@ export default function Dashboard({ userEmail='', onLogout=null, bestPair=null, 
           <PairSelector value={config.pair} onChange={(p)=>setConfig(c=>({...c,pair:p}))}/>
           {ticker.last && (
             <div className="flex items-center gap-1.5 min-w-0">
-              <span className="mono font-bold text-gray-800 text-sm truncate">{fmt(ticker.last)}</span>
+              <span className="mono font-bold text-slate-100 text-sm truncate">{fmt(ticker.last)}</span>
               {ticker.change24h!==undefined && (
-                <span className={`text-xs font-bold px-1.5 py-0.5 rounded-full shrink-0 ${ticker.change24h>=0?'bg-emerald-100 text-emerald-600':'bg-red-100 text-red-500'}`}>
+                <span className={`text-xs font-bold px-1.5 py-0.5 rounded-full shrink-0 ${ticker.change24h>=0?'bg-emerald-900/40 text-emerald-400':'bg-red-900/40 text-red-400'}`}>
                   {fmtPct(ticker.change24h)}
                 </span>
               )}
@@ -261,21 +261,21 @@ export default function Dashboard({ userEmail='', onLogout=null, bestPair=null, 
 
         {/* Status dot only */}
         <div className="shrink-0">
-          <div className={`w-2.5 h-2.5 rounded-full ${isRunning?'bg-emerald-400 pulse':isPaused?'bg-amber-400':'bg-gray-300'}`}/>
+          <div className={`w-2.5 h-2.5 rounded-full ${isRunning?'bg-emerald-400 pulse':isPaused?'bg-amber-400':'bg-slate-600'}`}/>
         </div>
       </header>
 
       {/* Banners */}
       {isPaused && (
-        <div className="bg-amber-50 border-b border-amber-200 px-3 py-2 flex items-center gap-2">
-          <AlertTriangle size={13} className="text-amber-500 shrink-0"/>
-          <span className="text-xs text-amber-700 font-medium flex-1">Auto-pause: {bot.consecutiveLosses} consecutive losses</span>
+        <div className="bg-amber-900/30 border-b border-amber-700/50 px-3 py-2 flex items-center gap-2">
+          <AlertTriangle size={13} className="text-amber-400 shrink-0"/>
+          <span className="text-xs text-amber-300 font-medium flex-1">Auto-pause: {bot.consecutiveLosses} consecutive losses</span>
           <button onClick={()=>handleAction('resume')} className="text-xs bg-amber-500 text-white px-3 py-1 rounded-lg font-bold">Resume</button>
         </div>
       )}
       {isLive && liveBalance===null && (
-        <div className="bg-red-50 border-b border-red-200 px-3 py-2">
-          <p className="text-xs text-red-600">⚠️ Saldo Indodax gagal dimuat — cek API Key di Settings</p>
+        <div className="bg-red-900/30 border-b border-red-700/50 px-3 py-2">
+          <p className="text-xs text-red-400">⚠️ Saldo Indodax gagal dimuat — cek API Key di Settings</p>
         </div>
       )}
 
@@ -287,11 +287,11 @@ export default function Dashboard({ userEmail='', onLogout=null, bestPair=null, 
           <div className="p-3 space-y-3">
 
             {/* ── Control Bar: Mode + Start/Stop ── */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 flex items-center gap-3">
+            <div className="rounded-2xl shadow-sm border border-slate-700 p-3 flex items-center gap-3" style={{background:'var(--surface-2)'}}>
               {/* Status */}
               <div className="flex items-center gap-1.5">
-                <div className={`w-2 h-2 rounded-full ${isRunning?'bg-emerald-400 pulse':isPaused?'bg-amber-400':'bg-gray-300'}`}/>
-                <span className={`text-xs font-semibold ${isRunning?'text-emerald-500':isPaused?'text-amber-500':'text-gray-400'}`}>
+                <div className={`w-2 h-2 rounded-full ${isRunning?'bg-emerald-400 pulse':isPaused?'bg-amber-400':'bg-slate-600'}`}/>
+                <span className={`text-xs font-semibold ${isRunning?'text-emerald-400':isPaused?'text-amber-400':'text-slate-500'}`}>
                   {isRunning?'Running':isPaused?'Paused':'Stopped'}
                 </span>
               </div>
@@ -299,10 +299,11 @@ export default function Dashboard({ userEmail='', onLogout=null, bestPair=null, 
               <div className="flex-1"/>
 
               {/* Demo / Live toggle */}
-              <div className="flex rounded-xl overflow-hidden border border-gray-200 text-xs shadow-sm">
+              <div className="flex rounded-xl overflow-hidden border border-slate-600 text-xs shadow-sm">
                 {['demo','live'].map((m)=>(
                   <button key={m} onClick={()=>setConfig(c=>({...c,mode:m}))}
-                    className={`px-4 py-2 font-bold transition-colors ${config.mode===m?(m==='live'?'bg-red-500 text-white':'bg-sky-500 text-white'):'text-gray-400 bg-white'}`}>
+                    className={`px-4 py-2 font-bold transition-colors ${config.mode===m?(m==='live'?'bg-red-500 text-white':'bg-sky-500 text-white'):'text-slate-400'}`}
+                    style={config.mode!==m?{background:'var(--surface-3)'}:{}}>
                     {m === 'demo' ? '🎮 Demo' : '🔴 Live'}
                   </button>
                 ))}
@@ -311,7 +312,7 @@ export default function Dashboard({ userEmail='', onLogout=null, bestPair=null, 
               {/* Start / Stop */}
               {isRunning
                 ? <button onClick={()=>handleAction('stop')} disabled={actionLoading}
-                    className="flex items-center gap-1.5 px-4 py-2 bg-gray-700 text-white text-xs font-bold rounded-xl shadow">
+                    className="flex items-center gap-1.5 px-4 py-2 bg-slate-600 text-white text-xs font-bold rounded-xl shadow">
                     <Square size={11}/> Stop
                   </button>
                 : <button onClick={()=>handleAction('start')} disabled={actionLoading}
@@ -356,27 +357,27 @@ export default function Dashboard({ userEmail='', onLogout=null, bestPair=null, 
             {/* Stats */}
             <div className="grid grid-cols-4 gap-2">
               {[
-                {label:'Trade', val:demo.tradeCount||0,                             color:'#0ea5e9'},
-                {label:'Win%',  val:`${(bot.stats?.winRate||0).toFixed(0)}%`,       color:bot.stats?.winRate>=50?'#10b981':'#ef4444'},
-                {label:'Wins',  val:bot.stats?.wins||0,                             color:'#10b981'},
-                {label:'Loss',  val:bot.stats?.losses||0,                           color:'#ef4444'},
+                {label:'Trade', val:demo.tradeCount||0,                             color:'#38bdf8'},
+                {label:'Win%',  val:`${(bot.stats?.winRate||0).toFixed(0)}%`,       color:bot.stats?.winRate>=50?'#34d399':'#f87171'},
+                {label:'Wins',  val:bot.stats?.wins||0,                             color:'#34d399'},
+                {label:'Loss',  val:bot.stats?.losses||0,                           color:'#f87171'},
               ].map((s)=>(
-                <div key={s.label} className="bg-white rounded-xl p-2.5 shadow-sm border border-gray-100 text-center">
+                <div key={s.label} className="rounded-xl p-2.5 shadow-sm border border-slate-700 text-center" style={{background:'var(--surface-2)'}}>
                   <div className="mono font-bold text-lg leading-none" style={{color:s.color}}>{s.val}</div>
-                  <div className="text-xs text-gray-400 mt-0.5">{s.label}</div>
+                  <div className="text-xs text-slate-500 mt-0.5">{s.label}</div>
                 </div>
               ))}
             </div>
 
             {/* Running status + Session + Equity */}
-            <div className="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
+            <div className="rounded-xl p-3 shadow-sm border border-slate-700" style={{background:'var(--surface-2)'}}>
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <div className={`w-2.5 h-2.5 rounded-full ${isRunning?'bg-emerald-400 pulse':isPaused?'bg-amber-400':'bg-gray-300'}`}/>
-                  <span className="text-sm font-semibold text-gray-700">{isRunning?'Bot Berjalan':isPaused?'Bot Dijeda':'Bot Berhenti'}</span>
+                  <div className={`w-2.5 h-2.5 rounded-full ${isRunning?'bg-emerald-400 pulse':isPaused?'bg-amber-400':'bg-slate-600'}`}/>
+                  <span className="text-sm font-semibold text-slate-200">{isRunning?'Bot Berjalan':isPaused?'Bot Dijeda':'Bot Berhenti'}</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-xs text-gray-400">
-                  <span className="bg-sky-50 text-sky-600 px-2 py-0.5 rounded-full font-semibold">L{config.level}</span>
+                <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                  <span className="bg-sky-900/40 text-sky-400 px-2 py-0.5 rounded-full font-semibold">L{config.level}</span>
                   <span>{config.pair.replace('_idr','').toUpperCase()}</span>
                   <span>{config.tf}</span>
                 </div>
@@ -384,22 +385,22 @@ export default function Dashboard({ userEmail='', onLogout=null, bestPair=null, 
               {bot.lastSignal && (
                 <div className="flex flex-wrap gap-1.5">
                   {bot.lastSignal.session?.isGood!==undefined && (
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${bot.lastSignal.session.isGood?'bg-emerald-50 text-emerald-600':'bg-gray-100 text-gray-400'}`}>
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${bot.lastSignal.session.isGood?'bg-emerald-900/30 text-emerald-400':'bg-slate-700/50 text-slate-500'}`}>
                       {bot.lastSignal.session.isGood?'🟢':'😴'} {bot.lastSignal.session.sessionName||'Sepi'}
                     </span>
                   )}
                   {bot.lastSignal.equityMode?.mode && bot.lastSignal.equityMode.mode!=='normal' && (
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${bot.lastSignal.equityMode.mode==='protect'||bot.lastSignal.equityMode.mode==='conservative'?'bg-amber-50 text-amber-600':bot.lastSignal.equityMode.mode==='recovery'?'bg-red-50 text-red-500':'bg-purple-50 text-purple-600'}`}>
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${bot.lastSignal.equityMode.mode==='protect'||bot.lastSignal.equityMode.mode==='conservative'?'bg-amber-900/30 text-amber-400':bot.lastSignal.equityMode.mode==='recovery'?'bg-red-900/30 text-red-400':'bg-purple-900/30 text-purple-400'}`}>
                       ⚖️ {bot.lastSignal.equityMode.mode}
                     </span>
                   )}
                   {bot.lastSignal.candle?.pattern && bot.lastSignal.candle.pattern!=='none' && (
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-medium">
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-blue-900/30 text-blue-400 font-medium">
                       🕯️ {bot.lastSignal.candle.pattern.replace(/_/g,' ')}
                     </span>
                   )}
                   {bot.lastSignal.htfBias?.bias && (
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${bot.lastSignal.htfBias.bias==='bullish'?'bg-emerald-50 text-emerald-600':bot.lastSignal.htfBias.bias==='bearish'?'bg-red-50 text-red-500':'bg-gray-100 text-gray-400'}`}>
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${bot.lastSignal.htfBias.bias==='bullish'?'bg-emerald-900/30 text-emerald-400':bot.lastSignal.htfBias.bias==='bearish'?'bg-red-900/30 text-red-400':'bg-slate-700/50 text-slate-500'}`}>
                       HTF: {bot.lastSignal.htfBias.bias}
                     </span>
                   )}
@@ -408,9 +409,9 @@ export default function Dashboard({ userEmail='', onLogout=null, bestPair=null, 
             </div>
 
             {/* Open Positions */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-                <span className="text-sm font-bold text-gray-700">📂 Open Positions ({openPos.length})</span>
+            <div className="rounded-2xl shadow-sm border border-slate-700 overflow-hidden" style={{background:'var(--surface-2)'}}>
+              <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700">
+                <span className="text-sm font-bold text-slate-200">📂 Open Positions ({openPos.length})</span>
               </div>
               <div className="p-3">
                 {openPos.length>0
@@ -421,11 +422,11 @@ export default function Dashboard({ userEmail='', onLogout=null, bestPair=null, 
             </div>
 
             {/* Trade History */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-                <span className="text-sm font-bold text-gray-700">📋 Trade History <span className="text-gray-400 font-normal">({demo.closedTrades?.length||0})</span></span>
+            <div className="rounded-2xl shadow-sm border border-slate-700 overflow-hidden" style={{background:'var(--surface-2)'}}>
+              <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700">
+                <span className="text-sm font-bold text-slate-200">📋 Trade History <span className="text-slate-500 font-normal">({demo.closedTrades?.length||0})</span></span>
                 {demo.closedTrades?.length>0 && (
-                  <button onClick={handleClearHistory} className="text-xs text-red-400 font-semibold px-2 py-1 hover:bg-red-50 rounded-lg">🗑️ Hapus Semua</button>
+                  <button onClick={handleClearHistory} className="text-xs text-red-400 font-semibold px-2 py-1 hover:bg-red-900/20 rounded-lg">🗑️ Hapus Semua</button>
                 )}
               </div>
               <div className="p-3">
@@ -444,62 +445,63 @@ export default function Dashboard({ userEmail='', onLogout=null, bestPair=null, 
             <div className="flex gap-2 overflow-x-auto pb-1">
               {TIMEFRAMES.map((tf)=>(
                 <button key={tf} onClick={()=>setConfig(c=>({...c,tf}))}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold shrink-0 shadow-sm ${config.tf===tf?'bg-sky-500 text-white':'bg-white border border-gray-200 text-gray-600'}`}>{tf}</button>
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold shrink-0 shadow-sm ${config.tf===tf?'bg-sky-500 text-white':'border border-slate-600 text-slate-300'}`}
+                  style={config.tf!==tf?{background:'var(--surface-2)'}:{}}>{tf}</button>
               ))}
             </div>
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+            <div className="rounded-2xl shadow-sm border border-slate-700 overflow-hidden" style={{background:'var(--surface-2)'}}>
+              <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-gray-800">{config.pair.replace('_idr','').toUpperCase()}/IDR</span>
-                  <span className="text-xs text-gray-400">{config.tf}</span>
+                  <span className="text-sm font-bold text-slate-100">{config.pair.replace('_idr','').toUpperCase()}/IDR</span>
+                  <span className="text-xs text-slate-500">{config.tf}</span>
                   {indicators.trend && (
-                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${indicators.trend==='bullish'?'bg-emerald-100 text-emerald-600':indicators.trend==='bearish'?'bg-red-100 text-red-500':'bg-gray-100 text-gray-500'}`}>
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${indicators.trend==='bullish'?'bg-emerald-900/40 text-emerald-400':indicators.trend==='bearish'?'bg-red-900/40 text-red-400':'bg-slate-700/50 text-slate-400'}`}>
                       {indicators.trend==='bullish'?'↑ Bull':indicators.trend==='bearish'?'↓ Bear':'→ Side'}
                     </span>
                   )}
                 </div>
                 {indicators.rsi!=null && (
-                  <span className={`mono text-sm font-bold ${indicators.rsi<30?'text-emerald-500':indicators.rsi>70?'text-red-500':'text-gray-600'}`}>RSI {indicators.rsi}</span>
+                  <span className={`mono text-sm font-bold ${indicators.rsi<30?'text-emerald-400':indicators.rsi>70?'text-red-400':'text-slate-300'}`}>RSI {indicators.rsi}</span>
                 )}
               </div>
               <CandleChart candles={candles} trades={demo.closedTrades||[]} openPositions={openPos} pair={config.pair}/>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-              <p className="text-sm font-bold text-gray-700 mb-3">📊 Market Info</p>
+            <div className="rounded-2xl shadow-sm border border-slate-700 p-4" style={{background:'var(--surface-2)'}}>
+              <p className="text-sm font-bold text-slate-200 mb-3">📊 Market Info</p>
               <div className="grid grid-cols-2 gap-y-2.5 gap-x-4">
                 {[
-                  {l:'Last Price', v:`Rp ${fmt(ticker.last)}`,   c:'text-sky-600 font-bold'},
-                  {l:'24h Change', v:fmtPct(ticker.change24h),   c:ticker.change24h>=0?'text-emerald-600 font-bold':'text-red-500 font-bold'},
-                  {l:'Bid',        v:`Rp ${fmt(ticker.buy)}`,    c:'text-gray-700'},
-                  {l:'Ask',        v:`Rp ${fmt(ticker.sell)}`,   c:'text-gray-700'},
-                  {l:'24h High',   v:`Rp ${fmt(ticker.high)}`,   c:'text-emerald-600'},
-                  {l:'24h Low',    v:`Rp ${fmt(ticker.low)}`,    c:'text-red-500'},
+                  {l:'Last Price', v:`Rp ${fmt(ticker.last)}`,   c:'text-sky-400 font-bold'},
+                  {l:'24h Change', v:fmtPct(ticker.change24h),   c:ticker.change24h>=0?'text-emerald-400 font-bold':'text-red-400 font-bold'},
+                  {l:'Bid',        v:`Rp ${fmt(ticker.buy)}`,    c:'text-slate-300'},
+                  {l:'Ask',        v:`Rp ${fmt(ticker.sell)}`,   c:'text-slate-300'},
+                  {l:'24h High',   v:`Rp ${fmt(ticker.high)}`,   c:'text-emerald-400'},
+                  {l:'24h Low',    v:`Rp ${fmt(ticker.low)}`,    c:'text-red-400'},
                 ].map((row)=>(
                   <div key={row.l} className="flex justify-between items-center">
-                    <span className="text-xs text-gray-400">{row.l}</span>
-                    <span className={`mono text-xs ${row.c||'text-gray-700'}`}>{row.v}</span>
+                    <span className="text-xs text-slate-500">{row.l}</span>
+                    <span className={`mono text-xs ${row.c||'text-slate-300'}`}>{row.v}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {indicators.macd && (
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-                <p className="text-sm font-bold text-gray-700 mb-3">📉 Indicators</p>
+              <div className="rounded-2xl shadow-sm border border-slate-700 p-4" style={{background:'var(--surface-2)'}}>
+                <p className="text-sm font-bold text-slate-200 mb-3">📉 Indicators</p>
                 <div className="grid grid-cols-2 gap-y-2.5 gap-x-4">
                   {[
-                    {l:'MACD',      v:fmt(indicators.macd.macd),     c:indicators.macd.macd>=0?'text-emerald-600':'text-red-500'},
-                    {l:'Signal',    v:fmt(indicators.macd.signal),   c:'text-gray-700'},
-                    {l:'EMA9',      v:fmt(indicators.ema9),          c:'text-sky-600'},
-                    {l:'EMA21',     v:fmt(indicators.ema21),         c:'text-orange-500'},
+                    {l:'MACD',      v:fmt(indicators.macd.macd),     c:indicators.macd.macd>=0?'text-emerald-400':'text-red-400'},
+                    {l:'Signal',    v:fmt(indicators.macd.signal),   c:'text-slate-300'},
+                    {l:'EMA9',      v:fmt(indicators.ema9),          c:'text-sky-400'},
+                    {l:'EMA21',     v:fmt(indicators.ema21),         c:'text-orange-400'},
                     ...(indicators.bb?[
-                      {l:'BB Upper',v:fmt(indicators.bb.upper),      c:'text-gray-600'},
-                      {l:'BB Lower',v:fmt(indicators.bb.lower),      c:'text-gray-600'},
+                      {l:'BB Upper',v:fmt(indicators.bb.upper),      c:'text-slate-400'},
+                      {l:'BB Lower',v:fmt(indicators.bb.lower),      c:'text-slate-400'},
                     ]:[]),
                   ].map((row)=>(
                     <div key={row.l} className="flex justify-between items-center">
-                      <span className="text-xs text-gray-400">{row.l}</span>
+                      <span className="text-xs text-slate-500">{row.l}</span>
                       <span className={`mono text-xs font-semibold ${row.c}`}>{row.v}</span>
                     </div>
                   ))}
@@ -512,44 +514,45 @@ export default function Dashboard({ userEmail='', onLogout=null, bestPair=null, 
         {/* ═══ SIGNAL ═══ */}
         {tab==='signal' && (
           <div className="p-3 space-y-3">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-              <p className="text-sm font-bold text-gray-700 mb-3">🎯 Strategy Level</p>
+            <div className="rounded-2xl shadow-sm border border-slate-700 p-4" style={{background:'var(--surface-2)'}}>
+              <p className="text-sm font-bold text-slate-200 mb-3">🎯 Strategy Level</p>
               <div className="space-y-2">
                 {LEVELS.map((lv)=>(
                   <button key={lv.id} onClick={()=>setConfig(c=>({...c,level:lv.id}))}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border text-left transition-all ${config.level===lv.id?'border-sky-300 bg-sky-50':'border-gray-200 bg-gray-50 hover:bg-gray-100'}`}>
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border text-left transition-all ${config.level===lv.id?'border-sky-600/50 bg-sky-900/20':'border-slate-600 hover:bg-slate-700/30'}`}
+                    style={config.level!==lv.id?{background:'var(--surface-3)'}:{}}>
                     <span className="text-xl">{lv.icon}</span>
                     <div className="flex-1">
-                      <div className={`text-sm font-bold ${config.level===lv.id?'text-sky-600':'text-gray-700'}`}>L{lv.id} — {lv.label}</div>
-                      <div className="text-xs text-gray-400">{lv.desc}</div>
+                      <div className={`text-sm font-bold ${config.level===lv.id?'text-sky-400':'text-slate-200'}`}>L{lv.id} — {lv.label}</div>
+                      <div className="text-xs text-slate-500">{lv.desc}</div>
                     </div>
-                    {config.level===lv.id && <div className="w-2.5 h-2.5 rounded-full bg-sky-500 shrink-0"/>}
+                    {config.level===lv.id && <div className="w-2.5 h-2.5 rounded-full bg-sky-400 shrink-0"/>}
                   </button>
                 ))}
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-              <p className="text-sm font-bold text-gray-700 mb-3">📡 Last Signal <span className="text-gray-400 font-normal text-xs ml-1">L{config.level}</span></p>
+            <div className="rounded-2xl shadow-sm border border-slate-700 p-4" style={{background:'var(--surface-2)'}}>
+              <p className="text-sm font-bold text-slate-200 mb-3">📡 Last Signal <span className="text-slate-500 font-normal text-xs ml-1">L{config.level}</span></p>
               <SignalPanel signal={bot.lastSignal} level={config.level}/>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
-                <span className="text-sm font-bold text-gray-700">📝 Trade Log</span>
-                <span className="text-xs text-gray-400">{logs.length} entries</span>
+            <div className="rounded-2xl shadow-sm border border-slate-700 overflow-hidden" style={{background:'var(--surface-2)'}}>
+              <div className="px-4 py-3 border-b border-slate-700 flex items-center justify-between">
+                <span className="text-sm font-bold text-slate-200">📝 Trade Log</span>
+                <span className="text-xs text-slate-500">{logs.length} entries</span>
               </div>
               <div className="overflow-y-auto" style={{maxHeight:300}}>
                 {logs.length===0
-                  ? <div className="py-8 text-center text-xs text-gray-400">Log kosong — start bot</div>
+                  ? <div className="py-8 text-center text-xs text-slate-500">Log kosong — start bot</div>
                   : logs.map((log)=>(
-                      <div key={log.id} className="px-4 py-2.5 flex items-start gap-2.5 border-b border-gray-50 last:border-0">
-                        <span className={`text-sm shrink-0 mt-0.5 ${log.type==='buy'||log.type==='profit'?'text-emerald-500':log.type==='loss'?'text-red-400':log.type==='warning'?'text-amber-500':'text-gray-400'}`}>
+                      <div key={log.id} className="px-4 py-2.5 flex items-start gap-2.5 border-b border-slate-700/50 last:border-0">
+                        <span className={`text-sm shrink-0 mt-0.5 ${log.type==='buy'||log.type==='profit'?'text-emerald-400':log.type==='loss'?'text-red-400':log.type==='warning'?'text-amber-400':'text-slate-500'}`}>
                           {log.type==='buy'?'↑':log.type==='profit'?'✓':log.type==='loss'?'✗':log.type==='warning'?'⚠':'·'}
                         </span>
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs text-gray-700 break-words">{log.message}</p>
-                          <p className="mono text-xs text-gray-400 mt-0.5">{new Date(log.time).toLocaleTimeString('id-ID')}</p>
+                          <p className="text-xs text-slate-300 break-words">{log.message}</p>
+                          <p className="mono text-xs text-slate-500 mt-0.5">{new Date(log.time).toLocaleTimeString('id-ID')}</p>
                         </div>
                       </div>
                     ))
@@ -575,7 +578,7 @@ export default function Dashboard({ userEmail='', onLogout=null, bestPair=null, 
               : <div className="flex items-center justify-center py-12">
                   <div className="text-center">
                     <div className="w-8 h-8 border-2 border-sky-500 border-t-transparent rounded-full animate-spin mx-auto mb-3"/>
-                    <p className="text-gray-400 text-sm">Memuat pengaturan...</p>
+                    <p className="text-slate-500 text-sm">Memuat pengaturan...</p>
                   </div>
                 </div>
             }
@@ -600,28 +603,28 @@ export default function Dashboard({ userEmail='', onLogout=null, bestPair=null, 
       </div>
 
       {/* ── BOTTOM NAV ── */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg flex z-50">
+      <nav className="fixed bottom-0 left-0 right-0 border-t border-slate-700 shadow-lg flex z-50" style={{background:'var(--surface-2)'}}>
         {TABS.map(({id,label,icon})=>(
           <button key={id} onClick={()=>setTab(id)}
-            className={`flex-1 flex flex-col items-center justify-center py-2 gap-0.5 transition-colors ${tab===id?'text-sky-500':'text-gray-400'}`}>
+            className={`flex-1 flex flex-col items-center justify-center py-2 gap-0.5 transition-colors ${tab===id?'text-sky-400':'text-slate-600'}`}>
             <span className="text-xl leading-none">{icon}</span>
-            <span className={`text-xs font-semibold ${tab===id?'text-sky-500':'text-gray-400'}`}>{label}</span>
-            {tab===id && <div className="w-1 h-1 rounded-full bg-sky-500"/>}
+            <span className={`text-xs font-semibold ${tab===id?'text-sky-400':'text-slate-600'}`}>{label}</span>
+            {tab===id && <div className="w-1 h-1 rounded-full bg-sky-400"/>}
           </button>
         ))}
       </nav>
 
       {/* Live Confirm Modal */}
       {liveConfirm && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-5">
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+          <div className="rounded-2xl shadow-2xl w-full max-w-sm p-5 border border-slate-700" style={{background:'var(--surface-2)'}}>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center"><AlertTriangle size={20} className="text-red-500"/></div>
-              <div><h3 className="font-bold text-gray-900">Aktifkan LIVE Mode?</h3><p className="text-xs text-gray-500">Trading dengan uang nyata</p></div>
+              <div className="w-10 h-10 bg-red-900/40 rounded-xl flex items-center justify-center"><AlertTriangle size={20} className="text-red-400"/></div>
+              <div><h3 className="font-bold text-slate-100">Aktifkan LIVE Mode?</h3><p className="text-xs text-slate-500">Trading dengan uang nyata</p></div>
             </div>
-            <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl p-3 mb-4">⚠️ Akan eksekusi transaksi NYATA dengan API Indodax Anda.</p>
+            <p className="text-xs text-red-400 bg-red-900/20 border border-red-700/50 rounded-xl p-3 mb-4">⚠️ Akan eksekusi transaksi NYATA dengan API Indodax Anda.</p>
             <div className="flex gap-2">
-              <button onClick={()=>setLiveConfirm(false)} className="flex-1 py-2.5 border border-gray-200 text-gray-600 text-sm font-medium rounded-xl">Batal</button>
+              <button onClick={()=>setLiveConfirm(false)} className="flex-1 py-2.5 border border-slate-600 text-slate-300 text-sm font-medium rounded-xl" style={{background:'var(--surface-3)'}}>Batal</button>
               <button onClick={()=>{setLiveConfirm(false);handleAction('start',{confirmed:true});}} className="flex-1 py-2.5 bg-red-500 text-white text-sm font-bold rounded-xl">Ya, LIVE</button>
             </div>
           </div>
@@ -636,15 +639,15 @@ function RiskSlider({ label, field, min, max, step=1, unit='', vals, setVals }) 
   const val     = vals[field] ?? min;
   const display = field==='targetProfitIDR' ? 'Rp '+new Intl.NumberFormat('id-ID').format(val) : val+unit;
   return (
-    <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+    <div className="rounded-xl p-3 border border-slate-700" style={{background:'var(--surface-3)'}}>
       <div className="flex justify-between text-xs mb-2">
-        <span className="text-gray-500 font-medium">{label}</span>
-        <span className="mono font-bold text-sky-600">{display}</span>
+        <span className="text-slate-400 font-medium">{label}</span>
+        <span className="mono font-bold text-sky-400">{display}</span>
       </div>
       <input type="range" min={min} max={max} step={step} value={val}
         onChange={(e)=>setVals(v=>({...v,[field]:parseFloat(e.target.value)}))}
         className="w-full accent-sky-500"/>
-      <div className="flex justify-between text-xs text-gray-300 mt-1">
+      <div className="flex justify-between text-xs text-slate-600 mt-1">
         <span>{field==='targetProfitIDR'?'Rp '+new Intl.NumberFormat('id-ID').format(min):min+unit}</span>
         <span>{field==='targetProfitIDR'?'Rp '+new Intl.NumberFormat('id-ID').format(max):max+unit}</span>
       </div>
@@ -678,20 +681,20 @@ function RiskTab({ riskSettings: s, onUpdate, consecutiveLosses, openPositions }
 
   return (
     <>
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-        <p className="text-sm font-bold text-gray-700 mb-3">🛡️ Risk Monitor Live</p>
+      <div className="rounded-2xl shadow-sm border border-slate-700 p-4" style={{background:'var(--surface-2)'}}>
+        <p className="text-sm font-bold text-slate-200 mb-3">🛡️ Risk Monitor Live</p>
         <div className="space-y-3">
-          {[{label:'Consecutive Losses',val:consecutiveLosses,max:3,color:'#ef4444'},
-            {label:'Open Positions',    val:openPositions,    max:2,color:'#0ea5e9'}].map((item)=>(
+          {[{label:'Consecutive Losses',val:consecutiveLosses,max:3,color:'#f87171'},
+            {label:'Open Positions',    val:openPositions,    max:2,color:'#38bdf8'}].map((item)=>(
             <div key={item.label}>
               <div className="flex justify-between text-xs mb-1.5">
-                <span className="text-gray-500">{item.label}</span>
+                <span className="text-slate-500">{item.label}</span>
                 <span className="mono font-bold" style={{color:item.color}}>{item.val}/{item.max}</span>
               </div>
               <div className="flex gap-1">
                 {Array.from({length:item.max}).map((_,i)=>(
                   <div key={i} className={`h-2 flex-1 rounded-full transition-all`}
-                    style={{background: i<item.val ? item.color : '#e5e7eb'}}/>
+                    style={{background: i<item.val ? item.color : '#334155'}}/>
                 ))}
               </div>
             </div>
@@ -699,8 +702,8 @@ function RiskTab({ riskSettings: s, onUpdate, consecutiveLosses, openPositions }
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-        <p className="text-sm font-bold text-gray-700 mb-3">⚙️ Risk Parameters</p>
+      <div className="rounded-2xl shadow-sm border border-slate-700 p-4" style={{background:'var(--surface-2)'}}>
+        <p className="text-sm font-bold text-slate-200 mb-3">⚙️ Risk Parameters</p>
         <div className="space-y-3">
           {sliders.map((sl)=>(
             <RiskSlider key={sl.field} {...sl} vals={vals} setVals={setVals}/>
@@ -708,7 +711,7 @@ function RiskTab({ riskSettings: s, onUpdate, consecutiveLosses, openPositions }
         </div>
       </div>
 
-      <div className="bg-sky-50 border border-sky-200 rounded-xl p-3 text-xs text-sky-700 space-y-1">
+      <div className="bg-sky-900/20 border border-sky-700/40 rounded-xl p-3 text-xs text-sky-300 space-y-1">
         <p className="font-bold">💡 Rekomendasi Scalping 100K → 1Jt</p>
         <p>• SL 1% / TP 2% → Risk:Reward = 1:2</p>
         <p>• Risk/Trade 80% saldo (agresif)</p>
@@ -745,32 +748,32 @@ function SettingsTab({ config, setConfig, onResetDemo, onReset, userEmail, onLog
     <div className="p-3 space-y-3">
 
       {/* ── Auto Pair Scanner ── */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+      <div className="rounded-2xl shadow-sm border border-slate-700 p-4" style={{background:'var(--surface-2)'}}>
         <div className="flex items-center justify-between mb-3">
           <div>
-            <p className="text-sm font-bold text-gray-700">🔍 Auto Pair Scanner</p>
-            <p className="text-xs text-gray-400 mt-0.5">Otomatis pilih pair cuan terbaik setiap 4 menit</p>
+            <p className="text-sm font-bold text-slate-200">🔍 Auto Pair Scanner</p>
+            <p className="text-xs text-slate-500 mt-0.5">Otomatis pilih pair cuan terbaik setiap 4 menit</p>
           </div>
           <button
             onClick={() => onScannerToggle && onScannerToggle(!scannerActive)}
-            className={`relative w-12 h-6 rounded-full transition-colors ${scannerActive ? 'bg-sky-500' : 'bg-gray-200'}`}>
+            className={`relative w-12 h-6 rounded-full transition-colors ${scannerActive ? 'bg-sky-500' : 'bg-slate-600'}`}>
             <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${scannerActive ? 'translate-x-6' : 'translate-x-0.5'}`}/>
           </button>
         </div>
         {scannerActive && (
           <div className="space-y-2">
             {bestPair ? (
-              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3">
+              <div className="bg-emerald-900/20 border border-emerald-700/40 rounded-xl p-3">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-bold text-emerald-700">🏆 {bestPair.display}</p>
-                    <p className="text-xs text-emerald-600">Score: {bestPair.score} | RSI: {bestPair.rsi} | Trend: {bestPair.trend}</p>
+                    <p className="text-sm font-bold text-emerald-400">🏆 {bestPair.display}</p>
+                    <p className="text-xs text-emerald-500">Score: {bestPair.score} | RSI: {bestPair.rsi} | Trend: {bestPair.trend}</p>
                   </div>
                   <button onClick={() => onRunScanner && onRunScanner()} className="text-xs bg-emerald-500 text-white px-3 py-1.5 rounded-lg font-semibold">Refresh</button>
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-2 text-xs text-gray-400 bg-gray-50 rounded-xl p-3">
+              <div className="flex items-center gap-2 text-xs text-slate-500 rounded-xl p-3 border border-slate-700" style={{background:'var(--surface-3)'}}>
                 <div className="w-3 h-3 border border-sky-400 border-t-transparent rounded-full animate-spin"/>
                 Scanning pair terbaik...
               </div>
@@ -780,23 +783,23 @@ function SettingsTab({ config, setConfig, onResetDemo, onReset, userEmail, onLog
       </div>
 
       {/* ── Max Profit Mode ── */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+      <div className="rounded-2xl shadow-sm border border-slate-700 p-4" style={{background:'var(--surface-2)'}}>
         <div className="flex items-center justify-between mb-2">
           <div>
-            <p className="text-sm font-bold text-gray-700">🚀 Max Profit Mode</p>
-            <p className="text-xs text-gray-400 mt-0.5">Dynamic ATR SL/TP + Auto Compound setelah win streak</p>
+            <p className="text-sm font-bold text-slate-200">🚀 Max Profit Mode</p>
+            <p className="text-xs text-slate-500 mt-0.5">Dynamic ATR SL/TP + Auto Compound setelah win streak</p>
           </div>
           <button
             onClick={async () => {
               const d = await fetch('/api/settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'toggleMaxProfitMode'})}).then(r=>r.json());
               if(d.success && onUpdateRisk) onUpdateRisk(d.risk);
             }}
-            className={`relative w-12 h-6 rounded-full transition-colors ${riskSettings?.maxProfitMode ? 'bg-emerald-500' : 'bg-gray-200'}`}>
+            className={`relative w-12 h-6 rounded-full transition-colors ${riskSettings?.maxProfitMode ? 'bg-emerald-500' : 'bg-slate-600'}`}>
             <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${riskSettings?.maxProfitMode ? 'translate-x-6' : 'translate-x-0.5'}`}/>
           </button>
         </div>
         {riskSettings?.maxProfitMode && (
-          <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-3 text-xs text-emerald-700 space-y-1">
+          <div className="bg-emerald-900/20 border border-emerald-700/40 rounded-xl p-3 text-xs text-emerald-400 space-y-1">
             <p>✅ <strong>ATR Dinamis</strong> — SL/TP menyesuaikan volatilitas realtime</p>
             <p>✅ <strong>Auto Compound</strong> — size bertambah otomatis saat win streak 3+</p>
             <p>✅ <strong>Buy Low Sell High</strong> — entry hanya di zona support/oversold</p>
@@ -805,22 +808,24 @@ function SettingsTab({ config, setConfig, onResetDemo, onReset, userEmail, onLog
       </div>
 
       {/* Demo Balance */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-        <p className="text-sm font-bold text-gray-700 mb-3">💰 Saldo Demo Awal</p>
+      <div className="rounded-2xl shadow-sm border border-slate-700 p-4" style={{background:'var(--surface-2)'}}>
+        <p className="text-sm font-bold text-slate-200 mb-3">💰 Saldo Demo Awal</p>
         <div className="flex gap-2 mb-2">
           <input type="number" value={balInput} onChange={(e)=>setBalInput(e.target.value)}
-            className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 mono outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100"
+            className="flex-1 border border-slate-600 rounded-xl px-3 py-2.5 text-sm text-slate-200 mono outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-900/50"
+            style={{background:'var(--surface-3)'}}
             placeholder="100000"/>
           <button onClick={handleReset} disabled={resetting}
             className="px-4 py-2 bg-sky-500 text-white text-xs font-bold rounded-xl shadow disabled:opacity-50">
             {resetting?'...':'Reset'}
           </button>
         </div>
-        {resetMsg && <p className="text-xs text-emerald-600 font-medium">{resetMsg}</p>}
+        {resetMsg && <p className="text-xs text-emerald-400 font-medium">{resetMsg}</p>}
         <div className="flex flex-wrap gap-2 mt-2">
           {[100000,500000,1000000,5000000].map((v)=>(
             <button key={v} onClick={()=>setBalInput(String(v))}
-              className="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg font-medium hover:bg-sky-50 hover:text-sky-600 border border-gray-200">
+              className="text-xs text-slate-400 px-3 py-1.5 rounded-lg font-medium border border-slate-600 hover:border-sky-600 hover:text-sky-400"
+              style={{background:'var(--surface-3)'}}>
               Rp {(v/1000).toFixed(0)}K
             </button>
           ))}
@@ -828,19 +833,20 @@ function SettingsTab({ config, setConfig, onResetDemo, onReset, userEmail, onLog
       </div>
 
       {/* Bot Config */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-        <p className="text-sm font-bold text-gray-700 mb-3">🤖 Konfigurasi Bot</p>
+      <div className="rounded-2xl shadow-sm border border-slate-700 p-4" style={{background:'var(--surface-2)'}}>
+        <p className="text-sm font-bold text-slate-200 mb-3">🤖 Konfigurasi Bot</p>
         <div className="space-y-3">
           <div>
-            <p className="text-xs text-gray-500 mb-2 font-medium">Trading Pair</p>
+            <p className="text-xs text-slate-500 mb-2 font-medium">Trading Pair</p>
             <PairSelector value={config.pair} onChange={(p)=>setConfig(c=>({...c,pair:p}))}/>
           </div>
           <div>
-            <p className="text-xs text-gray-500 mb-2 font-medium">Timeframe</p>
+            <p className="text-xs text-slate-500 mb-2 font-medium">Timeframe</p>
             <div className="flex gap-1.5 flex-wrap">
               {['1m','5m','15m','1h','4h'].map((tf)=>(
                 <button key={tf} onClick={()=>setConfig(c=>({...c,tf}))}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold ${config.tf===tf?'bg-sky-500 text-white shadow':'bg-gray-100 text-gray-600 border border-gray-200'}`}>{tf}</button>
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold ${config.tf===tf?'bg-sky-500 text-white shadow':'text-slate-400 border border-slate-600'}`}
+                  style={config.tf!==tf?{background:'var(--surface-3)'}:{}}>{tf}</button>
               ))}
             </div>
           </div>
@@ -848,14 +854,14 @@ function SettingsTab({ config, setConfig, onResetDemo, onReset, userEmail, onLog
       </div>
 
       {/* API Key info */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+      <div className="rounded-2xl shadow-sm border border-slate-700 p-4" style={{background:'var(--surface-2)'}}>
         <div className="flex items-center gap-2 mb-3">
-          <Lock size={14} className="text-gray-400"/>
-          <p className="text-sm font-bold text-gray-700">API Key Indodax</p>
+          <Lock size={14} className="text-slate-500"/>
+          <p className="text-sm font-bold text-slate-200">API Key Indodax</p>
         </div>
-        <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 text-xs text-gray-500 space-y-1.5">
-          <p>API Key diset melalui <strong className="text-gray-700">Vercel Dashboard</strong> (aman, tidak bisa diubah dari sini).</p>
-          <ol className="space-y-1 list-decimal list-inside text-gray-400">
+        <div className="border border-slate-600 rounded-xl p-3 text-xs text-slate-500 space-y-1.5" style={{background:'var(--surface-3)'}}>
+          <p>API Key diset melalui <strong className="text-slate-300">Vercel Dashboard</strong> (aman, tidak bisa diubah dari sini).</p>
+          <ol className="space-y-1 list-decimal list-inside text-slate-600">
             <li>Buka vercel.com → project kamu</li>
             <li>Settings → Environment Variables</li>
             <li>Tambah: INDODAX_API_KEY & INDODAX_SECRET_KEY</li>
@@ -866,30 +872,30 @@ function SettingsTab({ config, setConfig, onResetDemo, onReset, userEmail, onLog
 
       {/* Account */}
       {userEmail && (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-          <p className="text-sm font-bold text-gray-700 mb-3">👤 Akun</p>
+        <div className="rounded-2xl shadow-sm border border-slate-700 p-4" style={{background:'var(--surface-2)'}}>
+          <p className="text-sm font-bold text-slate-200 mb-3">👤 Akun</p>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-gray-800">{userEmail}</p>
-              <p className="text-xs text-gray-400">IndoTrader v3.0</p>
+              <p className="text-sm font-semibold text-slate-100">{userEmail}</p>
+              <p className="text-xs text-slate-500">IndoTrader v3.0</p>
             </div>
             {onLogout && (
               <button onClick={()=>{ if(confirm('Logout?')) onLogout(); }}
-                className="px-4 py-2 bg-red-50 border border-red-200 text-red-500 text-xs font-bold rounded-xl">Logout</button>
+                className="px-4 py-2 bg-red-900/20 border border-red-700/50 text-red-400 text-xs font-bold rounded-xl">Logout</button>
             )}
           </div>
         </div>
       )}
 
       {/* Reset */}
-      <div className="bg-white rounded-2xl shadow-sm border border-red-100 p-4">
+      <div className="rounded-2xl shadow-sm border border-red-900/40 p-4" style={{background:'var(--surface-2)'}}>
         <p className="text-sm font-bold text-red-400 mb-3">⚠️ Reset Data</p>
-        <button onClick={onReset} className="w-full py-2.5 border border-red-200 text-red-400 text-xs font-bold rounded-xl">
+        <button onClick={onReset} className="w-full py-2.5 border border-red-800/50 text-red-500 text-xs font-bold rounded-xl" style={{background:'var(--surface-3)'}}>
           Reset Bot + Demo Data
         </button>
       </div>
 
-      <p className="text-center text-xs text-gray-300 pb-2">IndoTrader v3.0 — Scalping Engine</p>
+      <p className="text-center text-xs text-slate-700 pb-2">IndoTrader v3.0 — Scalping Engine</p>
     </div>
   );
 }
@@ -910,31 +916,33 @@ function PairSelector({ value, onChange }) {
   return (
     <div className="relative" ref={ref}>
       <button onClick={()=>{setOpen(v=>!v);setSearch('');}}
-        className="flex items-center gap-1.5 text-sm font-bold text-gray-700 bg-gray-50 px-2.5 py-1.5 rounded-lg border border-gray-200 shadow-sm">
-        <span className="text-sky-500 text-xs">●</span>
-        {value.replace('_idr','').toUpperCase()}<span className="text-gray-400 text-xs">/IDR</span>
-        <ChevronDown size={12} className={`transition-transform text-gray-400 ${open?'rotate-180':''}`}/>
+        className="flex items-center gap-1.5 text-sm font-bold text-slate-200 px-2.5 py-1.5 rounded-lg border border-slate-600 shadow-sm"
+        style={{background:'var(--surface-3)'}}>
+        <span className="text-sky-400 text-xs">●</span>
+        {value.replace('_idr','').toUpperCase()}<span className="text-slate-500 text-xs">/IDR</span>
+        <ChevronDown size={12} className={`transition-transform text-slate-500 ${open?'rotate-180':''}`}/>
       </button>
       {open && (
-        <div className="absolute top-full mt-2 left-0 bg-white border border-gray-200 rounded-2xl shadow-xl z-[100] w-56 overflow-hidden">
-          <div className="p-2 border-b border-gray-100">
+        <div className="absolute top-full mt-2 left-0 border border-slate-600 rounded-2xl shadow-xl z-[100] w-56 overflow-hidden" style={{background:'var(--surface-2)'}}>
+          <div className="p-2 border-b border-slate-700">
             <input type="text" placeholder="Cari pair..." value={search} onChange={(e)=>setSearch(e.target.value)}
-              className="w-full text-xs px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:border-sky-400 text-gray-700" autoFocus/>
+              className="w-full text-xs px-3 py-2 border border-slate-600 rounded-lg outline-none focus:border-sky-500 text-slate-200 placeholder-slate-600"
+              style={{background:'var(--surface-3)'}} autoFocus/>
           </div>
           <div className="overflow-y-auto" style={{maxHeight:280}}>
             {filtered.map((g)=>(
               <div key={g.label}>
-                <div className="px-3 py-1.5 text-xs font-bold text-gray-400 bg-gray-50 sticky top-0">{g.label}</div>
+                <div className="px-3 py-1.5 text-xs font-bold text-slate-500 sticky top-0" style={{background:'var(--surface-3)'}}>{g.label}</div>
                 {g.pairs.map((p)=>(
                   <button key={p} onClick={()=>{onChange(p);setOpen(false);setSearch('');}}
-                    className={`w-full px-4 py-2 text-left text-xs font-semibold flex justify-between ${p===value?'bg-sky-50 text-sky-600':'text-gray-700 hover:bg-gray-50'}`}>
+                    className={`w-full px-4 py-2 text-left text-xs font-semibold flex justify-between ${p===value?'bg-sky-900/30 text-sky-400':'text-slate-300 hover:bg-slate-700/40'}`}>
                     <span>{p.replace('_idr','').toUpperCase()}</span>
-                    <span className="text-gray-300">IDR</span>
+                    <span className="text-slate-600">IDR</span>
                   </button>
                 ))}
               </div>
             ))}
-            {filtered.length===0 && <div className="py-6 text-center text-xs text-gray-400">Tidak ditemukan</div>}
+            {filtered.length===0 && <div className="py-6 text-center text-xs text-slate-500">Tidak ditemukan</div>}
           </div>
         </div>
       )}
@@ -947,23 +955,23 @@ function TradeRow({ trade, onDelete }) {
   const pos = trade.pnl >= 0;
   const dur = trade.duration ? (trade.duration < 60000 ? `${Math.round(trade.duration/1000)}d` : `${Math.round(trade.duration/60000)}m`) : '';
   return (
-    <div className="flex items-center gap-2 py-2 border-b border-gray-50 last:border-0">
-      <span className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${pos?'bg-emerald-50':'bg-red-50'}`}>
-        {pos?<ArrowUpRight size={13} className="text-emerald-500"/>:<ArrowDownRight size={13} className="text-red-400"/>}
+    <div className="flex items-center gap-2 py-2 border-b border-slate-700/50 last:border-0">
+      <span className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${pos?'bg-emerald-900/30':'bg-red-900/30'}`}>
+        {pos?<ArrowUpRight size={13} className="text-emerald-400"/>:<ArrowDownRight size={13} className="text-red-400"/>}
       </span>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5">
-          <span className="text-xs font-bold text-gray-700">{trade.pair?.replace('_idr','').toUpperCase()}/IDR</span>
-          {dur && <span className="text-xs text-gray-300">{dur}</span>}
+          <span className="text-xs font-bold text-slate-200">{trade.pair?.replace('_idr','').toUpperCase()}/IDR</span>
+          {dur && <span className="text-xs text-slate-600">{dur}</span>}
         </div>
-        <div className="text-xs text-gray-400">{trade.exitReason?.replace(/_/g,' ')}</div>
+        <div className="text-xs text-slate-500">{trade.exitReason?.replace(/_/g,' ')}</div>
       </div>
       <div className="text-right mr-1">
-        <div className={`mono text-xs font-bold ${pos?'text-emerald-500':'text-red-500'}`}>{pos?'+':''}Rp {fmt(Math.abs(trade.pnl))}</div>
-        <div className={`text-xs ${pos?'text-emerald-400':'text-red-400'}`}>{fmtPct(trade.pnlPct)}</div>
+        <div className={`mono text-xs font-bold ${pos?'text-emerald-400':'text-red-400'}`}>{pos?'+':''}Rp {fmt(Math.abs(trade.pnl))}</div>
+        <div className={`text-xs ${pos?'text-emerald-500':'text-red-500'}`}>{fmtPct(trade.pnlPct)}</div>
       </div>
       {onDelete && (
-        <button onClick={()=>onDelete(trade.id)} className="text-gray-200 hover:text-red-400 shrink-0 p-1 rounded-lg hover:bg-red-50 transition-colors text-xs">✕</button>
+        <button onClick={()=>onDelete(trade.id)} className="text-slate-600 hover:text-red-400 shrink-0 p-1 rounded-lg hover:bg-red-900/20 transition-colors text-xs">✕</button>
       )}
     </div>
   );
@@ -972,9 +980,9 @@ function TradeRow({ trade, onDelete }) {
 // ─── EmptyState ───────────────────────────────────────────────────────────────
 function EmptyState({ icon, label }) {
   return (
-    <div className="flex flex-col items-center justify-center py-6 text-gray-300">
+    <div className="flex flex-col items-center justify-center py-6 text-slate-600">
       <span className="text-3xl mb-2">{icon}</span>
-      <p className="text-xs text-gray-400">{label}</p>
+      <p className="text-xs text-slate-500">{label}</p>
     </div>
   );
 }
