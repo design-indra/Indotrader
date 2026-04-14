@@ -111,7 +111,7 @@ export default function LoginScreen({ onLogin }) {
             Default: <span className="text-slate-300 font-mono font-semibold">admin@indotrader.app</span>
           </p>
           <p className="text-xs text-slate-500 mt-0.5">
-            Password: <span className="text-slate-300 font-mono font-semibold">indotrader123</span>
+            Password: <span className="text-slate-300 font-mono font-semibold">admin123</span>
           </p>
           <p className="text-xs text-slate-600 mt-1">Ganti via Vercel ENV: AUTH_EMAIL & AUTH_PASSWORD</p>
         </div>
