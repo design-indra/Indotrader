@@ -137,6 +137,66 @@ export async function POST(req) {
         // ── Process exits ──────────────────────────────────────────────────
         for (const exitDec of (decision.exits || [])) {
           try {
+            // ── Fitur 1: Partial Take Profit ─────────────────────────────
+            if (exitDec.isPartial) {
+              if (state.mode === 'demo') {
+                const pos        = exitDec.position;
+                const halfAmount = Math.floor(pos.idrAmount * 0.5);
+                const halfCrypto = pos.cryptoAmount ? pos.cryptoAmount * 0.5 : null;
+                // Catat sebagai trade tersendiri di history
+                demo.closedTrades.unshift({
+                  id:           `${pos.id}_partial_${Date.now()}`,
+                  pair,
+                  openTime:     pos.openTime,
+                  exitTime:     Date.now(),
+                  entryPrice:   pos.entryPrice,
+                  exitPrice:    close,
+                  idrAmount:    halfAmount,
+                  cryptoAmount: halfCrypto,
+                  pnl:          exitDec.pnl,
+                  pnlPct:       halfAmount > 0 ? (exitDec.pnl / halfAmount) * 100 : 0,
+                  exitReason:   'partial_tp1',
+                  side:         'buy',
+                  isPartial:    true,
+                  duration:     pos.openTime ? Date.now() - pos.openTime : 0,
+                });
+                demo.idrBalance  += halfAmount + exitDec.pnl;
+                demo.totalPnl    += exitDec.pnl;
+                demo.tradeCount  += 1;
+                demo.totalPnlPct  = demo.startBalance > 0
+                  ? (demo.totalPnl / demo.startBalance) * 100 : 0;
+                // Kurangi posisi jadi 50%, tandai tp1Triggered, perketat trailing
+                const posIdx = demo.openPositions.findIndex(p => p.id === pos.id);
+                if (posIdx !== -1) {
+                  demo.openPositions[posIdx] = {
+                    ...demo.openPositions[posIdx],
+                    idrAmount:    halfAmount,
+                    cryptoAmount: halfCrypto,
+                    tp1Triggered: true,
+                    trailingStop: close * 0.995, // trailing diperketat ke -0.5%
+                  };
+                }
+                recordTradeResult(exitDec.pnl, pair);
+              }
+              continue;
+            }
+
+            // ── Fitur 2: Breakeven Stop ───────────────────────────────────
+            if (exitDec.isBreakeven) {
+              if (state.mode === 'demo') {
+                const posIdx = demo.openPositions.findIndex(p => p.id === exitDec.position.id);
+                if (posIdx !== -1) {
+                  demo.openPositions[posIdx] = {
+                    ...demo.openPositions[posIdx],
+                    stopLoss:     exitDec.newStopLoss,
+                    breakevenSet: true,
+                  };
+                }
+              }
+              continue;
+            }
+
+            // ── Fitur 3 + 4 + Normal: Smart Exit / Time Exit / SL / TP ───
             if (state.mode === 'demo') {
               const result = demoSell(exitDec.position.id, close, exitDec.reason);
               recordTradeResult(result.pnl, pair);
@@ -153,8 +213,12 @@ export async function POST(req) {
           try {
             if (state.mode === 'demo') {
               const position = demoBuy(pair, close, decision.entry.idrAmount, {
-                stopLoss: decision.entry.stopLoss, takeProfit: decision.entry.takeProfit,
+                stopLoss:     decision.entry.stopLoss,
+                takeProfit:   decision.entry.takeProfit,
                 trailingStop: decision.entry.trailingStop,
+                openTime:     decision.entry.openTime,
+                tp1Triggered: false,
+                breakevenSet: false,
               });
               decision.executedBuy = position;
             } else if (state.mode === 'live') {
